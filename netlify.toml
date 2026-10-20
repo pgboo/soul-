@@ -1,0 +1,16 @@
+# Netlify 构建配置
+# 仓库是 monorepo（backend / frontend-h5 / frontend-admin），根目录没有 package.json，
+# 所以必须把 base 指向前端子目录，否则 Netlify 默认在 /opt/buildhome/repo 执行 npm run build 会报 ENOENT。
+
+[build]
+  base = "frontend-h5"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
