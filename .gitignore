@@ -1,0 +1,92 @@
+# =====================================================================
+#  soul 社交 - Git 忽略规则
+#
+#  设计原则：
+#    1. 编译/打包产物不入库（node_modules、target、dist、apk）
+#    2. 密钥、密码配置不入库（signing keystore、local.properties）
+#    3. 用户上传数据、日志、数据库备份不入库（涉及隐私）
+# =====================================================================
+
+# ---------- 编译产物 ----------
+backend/target/
+frontend-h5/dist/
+frontend-h5/node_modules/
+frontend-h5/android/build/
+frontend-h5/android/app/build/
+frontend-h5/android/.gradle/
+*.class
+*.jar
+*.war
+
+# ---------- ⚠️ 后端里的前端构建产物镜像（不是源码）----------
+# pom.xml 的 maven-resources-plugin 会把 ../frontend-h5/dist 复制到
+# target/classes/static（正确）。但 src/main/resources 是 Maven 默认资源
+# 目录，它也会被一起打进 jar —— 两路叠加导致每次构建都往
+# src/main/resources/static/ 里多堆一套新 hash 的文件，旧的永不清理
+# （曾累计 251 个陈旧文件，占 jar 静态资源 72%）。
+# 这里必须忽略 + 定期清理，前端产物只走 dist → target 这一条路。
+backend/src/main/resources/static/
+
+# ---------- 分发产物 ----------
+dist-apk/
+*.apk
+*.aab
+
+# ---------- 日志 ----------
+*.log
+logs/
+backend/logs/
+
+# ---------- ⚠️ 签名密钥（最高危，绝不入库） ----------
+# 泄露后任何人都能签名成你的发布包。本地构建时由
+# deploy/build-apk.sh 自动生成，仓库里只保留 .example 模板。
+frontend-h5/android/keystore/
+frontend-h5/android/keystore.properties
+*.keystore
+*.jks
+
+# ---------- 环境 / 本地配置 ----------
+.env
+.env.local
+.env.*.local
+frontend-h5/android/local.properties
+*.local.properties
+
+# ---------- 用户上传的图片 ----------
+backend/upload/
+backend/upload-test/
+
+# ---------- 数据库备份 ----------
+.backup/
+*.sql.gz
+
+# ---------- IDE ----------
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+
+# ---------- 系统杂项 ----------
+.DS_Store
+Thumbs.db
+nohup.out
+
+# ---------- 内测反馈数据（含测试者个人信息） ----------
+deploy/*.csv
+
+# ---------- AI 工作数据（笔记/临时脚本，非项目源码） ----------
+.workbuddy-ai/
+
+# ---------- 第三方工具二进制（不入库） ----------
+# cloudflared 官方下载：https://github.com/cloudflare/cloudflared/releases
+# 本机放在 D:\cloudflared-windows-amd64.exe，路径可用 CF_BIN 环境变量覆盖。
+tools/
+
+# ---------- npm 缓存泄漏 ----------
+# 曾因环境变量 APPDATA 未展开，在 frontend-h5/ 下生成了字面名为
+# "%APPDATA%/npm-cache" 的 44MB 缓存目录并误入仓库。
+**/.npm-cache/
+frontend-h5/%APPDATA%/
+.npm/
+npm-debug.log*

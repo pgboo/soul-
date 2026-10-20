@@ -1,0 +1,87 @@
+// ===== 全局基础样式 =====
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+  font-size: 14px;
+  color: #303133;
+  background-color: #f0f2f5;
+  -webkit-font-smoothing: antialiased;
+}
+
+// ===== 后台主题色变量（专业克制，禁用 Soul 紫渐变）=====
+:root {
+  --admin-primary: #2b6cb0;
+  --admin-header-bg: #1f2d3d;
+  --admin-sidebar-bg: #ffffff;
+  --admin-sidebar-active: #eef4fc;
+  --admin-content-bg: #f0f2f5;
+  --admin-border: #e4e7ed;
+}
+
+// ===== 通用布局辅助类 =====
+.admin-page {
+  padding: 16px;
+}
+
+.admin-card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.06);
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.filter-bar .el-input,
+.filter-bar .el-select {
+  width: 200px;
+}
+
+.table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.pagination-wrap {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 16px;
+}
+
+.text-muted {
+  color: #909399;
+}
+
+.mb-12 {
+  margin-bottom: 12px;
+}
+
+// ===== Element Plus 局部风格微调 =====
+.el-table {
+  --el-table-header-bg-color: #fafafa;
+}
+
+.el-card {
+  border: 1px solid var(--admin-border);
+  box-shadow: none;
+}
